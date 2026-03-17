@@ -1,3 +1,4 @@
-export const Stored_Keys={
-    userData: 'userData'
+export class Stored_Keys {
+  static readonly userData = 'userData';
+  static readonly supabaseSession = 'supabaseSession';
 }

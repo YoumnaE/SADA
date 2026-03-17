@@ -3,10 +3,9 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-auth-layout',
-  imports: [RouterOutlet, RouterLinkWithHref, RouterLinkActive],
-  templateUrl: './auth-layout.component.html',
-  styleUrl: './auth-layout.component.css',
+  standalone: true,
+  imports: [RouterOutlet], // Remove RouterLinkWithHref and RouterLinkActive
+  templateUrl: './auth-layout.component.html'
 })
 export class AuthLayoutComponent {
-
 }
