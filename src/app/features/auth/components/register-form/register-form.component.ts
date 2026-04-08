@@ -15,6 +15,8 @@ export class RegisterFormComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
+  errorMessage = '';
+
   registerForm = new FormGroup({
     name: new FormControl('', [Validators.minLength(3), Validators.required]),
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -44,12 +46,14 @@ export class RegisterFormComponent {
             localStorage.setItem(Stored_Keys.userData, JSON.stringify(response.data.user));
           }
 
+          this.errorMessage = '';
           this.registerForm.reset();
 
           this.router.navigate(['/login']);
         },
         error: (error: any) => {
           console.error('Registration Error:', error.message || error);
+          this.errorMessage = error.message || 'حدث خطأ أثناء التسجيل، يرجى المحاولة مرة أخرى';
         }
       });
     }
