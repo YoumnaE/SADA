@@ -81,5 +81,34 @@
         }
     }
     </div>
+    <div class="my-4.5">
+        <label for="dateOfBirth" class="block mb-2.5 text-sm font-medium text-heading">تاريخ الميلاد</label>
+        <div class="relative">
+            <div class="absolute inset-y-0 inset-s-0 flex items-center ps-3 pointer-events-none">
+                <i class="text-gray-400 far fa-calendar"></i>
+            </div>
+            <input formControlName="dateOfBirth" type="date" id="dateOfBirth"
+                class="block w-full p-3 ps-9 bg-gray-100 border border-default-medium text-heading rounded">
+        </div>
+        @if (registerForm.get('dateOfBirth')?.touched) {
+            @if (registerForm.get('dateOfBirth')?.getError('required')) {
+                <p class="text-red-600">*تاريخ الميلاد مطلوب</p>
+            }
+        }
+    </div>
+    <div class="my-4.5">
+        <label class="block mb-2.5 text-sm font-medium text-heading">الجنس</label>
+        <select formControlName="gender" id="gender"
+            class="block w-full p-3 bg-gray-100 border border-default-medium text-heading rounded">
+            <option value="" disabled>اختر الجنس</option>
+            <option value="male">ذكر</option>
+            <option value="female">أنثى</option>
+        </select>
+        @if (registerForm.get('gender')?.touched) {
+            @if (registerForm.get('gender')?.getError('required')) {
+                <p class="text-red-600">*الجنس مطلوب</p>
+            }
+        }
+    </div>
     <button (click)="onRegisterSubmit()" class="bg-teal-700 rounded w-full text-white py-3.5 font-bold cursor-pointer">الخطوة التالية <i class="fa-solid fa-arrow-left"></i></button>
 </form>

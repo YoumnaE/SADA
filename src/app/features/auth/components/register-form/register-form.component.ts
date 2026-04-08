@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from './../../services/auth.service';
 import { Component, inject } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -35,30 +34,26 @@ export class RegisterFormComponent {
     this.registerForm.markAllAsTouched();
 
     if (this.registerForm.valid) {
-      // 1. Extract values from the form
-      const email = this.registerForm.get('email')?.value;
-      const password = this.registerForm.get('password')?.value;
+      const email = this.registerForm.get('email')?.value!;
+      const password = this.registerForm.get('password')?.value!;
+      const name = this.registerForm.get('name')?.value!;
+      const dateOfBirth = this.registerForm.get('dateOfBirth')?.value!;
+      const gender = this.registerForm.get('gender')?.value!;
 
-      // 2. Call the service (ensure AuthService has the 'register' method)
-      // Use ! because we know the form is valid and these fields have values
-      this.authService.register(email!, password!).subscribe({
+      this.authService.register(email, password, name, dateOfBirth, gender).subscribe({
         next: (response: any) => {
           console.log('Registration Success:', response);
-          
-          // Store user data if Supabase returned a user
+
           if (response.data?.user) {
             localStorage.setItem(Stored_Keys.userData, JSON.stringify(response.data.user));
           }
 
-          // 3. Reset form only on SUCCESS
           this.registerForm.reset();
           this.registerForm.get('gender')?.setValue('');
-          
-          // 4. Navigate to login or feed
+
           this.router.navigate(['/login']);
         },
         error: (error: any) => {
-          // Supabase errors usually arrive in error.message
           console.error('Registration Error:', error.message || error);
         }
       });
