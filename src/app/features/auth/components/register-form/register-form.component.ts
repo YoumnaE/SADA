@@ -23,8 +23,6 @@ export class RegisterFormComponent {
       Validators.pattern(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/)
     ]),
     rePassword: new FormControl('', [Validators.required]),
-    dateOfBirth: new FormControl('', [Validators.required]),
-    gender: new FormControl('', [Validators.required]),
   },
   {
     validators: [this.passwordMissmatch]
@@ -37,10 +35,8 @@ export class RegisterFormComponent {
       const email = this.registerForm.get('email')?.value!;
       const password = this.registerForm.get('password')?.value!;
       const name = this.registerForm.get('name')?.value!;
-      const dateOfBirth = this.registerForm.get('dateOfBirth')?.value!;
-      const gender = this.registerForm.get('gender')?.value!;
 
-      this.authService.register(email, password, name, dateOfBirth, gender).subscribe({
+      this.authService.register(email, password, name).subscribe({
         next: (response: any) => {
           console.log('Registration Success:', response);
 
@@ -49,7 +45,6 @@ export class RegisterFormComponent {
           }
 
           this.registerForm.reset();
-          this.registerForm.get('gender')?.setValue('');
 
           this.router.navigate(['/login']);
         },

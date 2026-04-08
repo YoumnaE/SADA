@@ -40,16 +40,14 @@ export class AuthService {
   register(
     email: string,
     password: string,
-    name: string,
-    dateOfBirth: string,
-    gender: string
+    name: string
   ): Observable<any> {
     return from(
       this.supabase.auth.signUp({
         email,
         password,
         options: {
-          data: { name, date_of_birth: dateOfBirth, gender }
+          data: { parent_name: name }
         }
       })
     ).pipe(
@@ -62,17 +60,14 @@ export class AuthService {
           throw new Error('Sign-up succeeded but no user was returned.');
         }
         return from(
-          this.supabase.from('profiles').insert({
-            id: user.id,
-            email: user.email,
-            name,
-            date_of_birth: dateOfBirth,
-            gender
+          this.supabase.from('parent').insert({
+            parent_name: name,
+            email: user.email
           })
         ).pipe(
-          map(profileResponse => {
-            if (profileResponse.error) {
-              throw profileResponse.error;
+          map(parentResponse => {
+            if (parentResponse.error) {
+              throw parentResponse.error;
             }
             return response;
           })
