@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { SUPABASE_CONFIG } from '../../../core/config/supabase.config';
 import { Observable, from, BehaviorSubject } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, switchMap, catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -37,11 +37,42 @@ export class AuthService {
     );
   }
 
-  // Changed method name from signup to register
-  register(email: string, password: string): Observable<any> {
+  register(
+    email: string,
+    password: string,
+    name: string
+  ): Observable<any> {
     return from(
-      this.supabase.auth.signUp({ email, password })
+      this.supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { parent_name: name }
+        }
+      })
     ).pipe(
+      switchMap(response => {
+        if (response.error) {
+          throw response.error;
+        }
+        const user = response.data.user;
+        if (!user) {
+          throw new Error('Sign-up succeeded but no user was returned.');
+        }
+        return from(
+          this.supabase.from('parent').insert({
+            parent_name: name,
+            email: user.email
+          })
+        ).pipe(
+          map(parentResponse => {
+            if (parentResponse.error) {
+              throw parentResponse.error;
+            }
+            return response;
+          })
+        );
+      }),
       catchError(error => {
         console.error('Registration error:', error);
         throw error;

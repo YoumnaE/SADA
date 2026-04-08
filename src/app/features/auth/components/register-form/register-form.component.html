@@ -53,7 +53,7 @@
                 <p class="text-red-600">*Password is required</p>
             }
             @if(registerForm.get('password')?.getError('pattern')){
-                <p class="text-red-600">على الأقل 8 أحرف، بها رقم ورمز واحد</p>
+                <p class="text-red-600">على الأقل 8 أحرف، بها حرف كبير وحرف صغير ورقم</p>
             }
             }
     </div>
@@ -81,5 +81,8 @@
         }
     }
     </div>
-    <button (click)="onRegisterSubmit()" class="bg-teal-700 rounded w-full text-white py-3.5 font-bold cursor-pointer">الخطوة التالية <i class="fa-solid fa-arrow-left"></i></button>
+    @if (errorMessage) {
+        <p class="text-red-600 text-sm mb-2">{{ errorMessage }}</p>
+    }
+    <button type="submit" class="bg-teal-700 rounded w-full text-white py-3.5 font-bold cursor-pointer">الخطوة التالية <i class="fa-solid fa-arrow-left"></i></button>
 </form>
