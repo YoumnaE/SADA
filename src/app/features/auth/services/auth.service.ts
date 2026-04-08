@@ -61,13 +61,14 @@ export class AuthService {
         }
         return from(
           this.supabase.from('parent').insert({
+            id: user.id,
             parent_name: name,
             email: user.email
           })
         ).pipe(
           map(parentResponse => {
             if (parentResponse.error) {
-              throw parentResponse.error;
+              throw new Error(`Failed to save user profile: ${parentResponse.error.message}`);
             }
             return response;
           })
